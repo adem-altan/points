@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "apexcharts": "^3.26.3",
+    "chart.js": "^3.2.1",
+    "react-chartjs-2": "^3.0.3",
+    "react-charts": "^2.0.0-beta.7",
+    "react-plotlyjs": "^0.4.4"
+  }
+}
