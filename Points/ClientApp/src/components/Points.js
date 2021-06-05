@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import Plot from "react-plotly.js";
-import { Button, Badge } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { Stats } from './Stats';
 
 const initialState = {
@@ -29,7 +29,8 @@ export class Points extends Component {
             let y = Math.floor((Math.random() * 1000));
             xArray.push(x);
             yArray.push(y);
-            this.isWithinRadiusOfCenter(x, y);
+            const isInside = this.isWithinRadiusOfCenter(x, y);
+            this.updateCounter(isInside);
         }
         this.setState({
             x: xArray,
@@ -40,15 +41,13 @@ export class Points extends Component {
     isWithinRadiusOfCenter(x, y, gridSize = 1000, radius = 450) {
         let centre = gridSize / 2;
         let distance = Math.sqrt(Math.pow(centre - x, 2) + Math.pow(centre - y, 2));
-        if (distance < radius) {
-            this.setState(prevState => {
-                return { inside: prevState.inside + 1 }
-            });
-        } else {
-            this.setState(prevState => {
-                return { outside: prevState.outside + 1 }
-            });
-        }
+        return distance < radius;
+    }
+
+    updateCounter(isInside) {
+        this.setState(prevState => {
+            return isInside ? { inside: prevState.inside + 1 } : { outside: prevState.outside + 1 };
+        });
     }
 
     render() {
