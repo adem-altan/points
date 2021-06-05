@@ -1,7 +1,8 @@
 ﻿import React, { Component } from 'react';
 import Plot from "react-plotly.js";
-import { Button } from 'react-bootstrap';
+import { Button, Dropdown, DropdownButton, select } from 'react-bootstrap';
 import { Stats } from './Stats';
+import Select from 'react-select';
 
 const initialState = {
     x: [],
@@ -11,19 +12,21 @@ const initialState = {
     n: 100,
     pointsInside: 0,
     pointsOutside: 0,
-    insideRatio: 0,
-    estimatedPiValue: 0
+    insideRatio: 0.0,
+    estimatedPiValue: 0.0
 };
+const options = [100, 200, 300, 400, 500, 1000];
 
 export class Points extends Component {
     constructor(props) {
         super(props);
         this.state = initialState;
         this.generatePoints = this.generatePoints.bind(this);
+        this.setN = this.setN.bind(this);
     }
+
     counter = 0;
-    insideRatio = 0;
-    estimatedPiValue = 0;
+    n = 100;
 
     generatePoints() {
         this.counter++;
@@ -31,7 +34,7 @@ export class Points extends Component {
         let xArray = [];
         let yArray = [];
 
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < this.n; i++) {
             let x = Math.floor((Math.random() * 1000));
             let y = Math.floor((Math.random() * 1000));
             xArray.push(x);
@@ -42,8 +45,7 @@ export class Points extends Component {
         this.setState({
             x: xArray,
             y: yArray
-        });
-        //this.findInsideRatioAndEstimatedPi();
+        }, () => { this.findInsideRatioAndEstimatedPi() });
     }
 
     isWithinRadiusOfCenter(x, y) {
@@ -62,9 +64,17 @@ export class Points extends Component {
     }
 
     findInsideRatioAndEstimatedPi() {
-        console.log(this.state.pointsInside);
-        this.insideRatio = (this.state.pointsInside / this.state.n);
-        this.estimatedPi = 4 * this.insideRatio;
+        const ratio = (this.state.pointsInside / this.n);
+        this.setState({
+            insideRatio: ratio
+        });
+    }
+
+    setN(e) {
+        this.n = e;
+        //this.setState({
+        //    n: e
+        //});
     }
 
     render() {
@@ -74,12 +84,18 @@ export class Points extends Component {
                     trial={this.counter}
                     inside={this.state.pointsInside}
                     outside={this.state.pointsOutside}
-                    ratio={(this.state.pointsInside / this.state.n)}
-                    pi={4 * (this.state.pointsInside / this.state.n)}
+                    ratio={this.state.insideRatio}
+                    pi={4 * this.state.insideRatio}
                 /><br />
                 <p>
                     <Button variant="outline-primary" size="lg" onClick={this.generatePoints}>Let there be points</Button>{' '}
                 </p>
+                <Select
+                    defaultValue="100"
+                    value={this.n}
+                    onChange={this.setN}
+                    options={options}
+                />
                 <Plot
                     data={[
                         {
