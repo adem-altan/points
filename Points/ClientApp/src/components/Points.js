@@ -6,8 +6,13 @@ import { Stats } from './Stats';
 const initialState = {
     x: [],
     y: [],
-    inside: 0,
-    outside: 0
+    gridSize: 1000,
+    radius: 450,
+    n: 100,
+    pointsInside: 0,
+    pointsOutside: 0,
+    insideRatio: 0,
+    estimatedPiValue: 0
 };
 
 export class Points extends Component {
@@ -17,6 +22,8 @@ export class Points extends Component {
         this.generatePoints = this.generatePoints.bind(this);
     }
     counter = 0;
+    insideRatio = 0;
+    estimatedPiValue = 0;
 
     generatePoints() {
         this.counter++;
@@ -36,18 +43,28 @@ export class Points extends Component {
             x: xArray,
             y: yArray
         });
+        //this.findInsideRatioAndEstimatedPi();
     }
 
-    isWithinRadiusOfCenter(x, y, gridSize = 1000, radius = 450) {
-        let centre = gridSize / 2;
-        let distance = Math.sqrt(Math.pow(centre - x, 2) + Math.pow(centre - y, 2));
+    isWithinRadiusOfCenter(x, y) {
+        const gridSize = this.state.gridSize;
+        const radius = this.state.radius;
+        const centre = gridSize / 2;
+        const distance = Math.sqrt(Math.pow(centre - x, 2) + Math.pow(centre - y, 2));
         return distance < radius;
     }
 
     updateCounter(isInside) {
         this.setState(prevState => {
-            return isInside ? { inside: prevState.inside + 1 } : { outside: prevState.outside + 1 };
+            return isInside ? { pointsInside: prevState.pointsInside + 1 } :
+                              { pointsOutside: prevState.pointsOutside + 1 };
         });
+    }
+
+    findInsideRatioAndEstimatedPi() {
+        console.log(this.state.pointsInside);
+        this.insideRatio = (this.state.pointsInside / this.state.n);
+        this.estimatedPi = 4 * this.insideRatio;
     }
 
     render() {
@@ -55,8 +72,10 @@ export class Points extends Component {
             <div>
                 <Stats
                     trial={this.counter}
-                    inside={this.state.inside}
-                    outside={this.state.outside}
+                    inside={this.state.pointsInside}
+                    outside={this.state.pointsOutside}
+                    ratio={(this.state.pointsInside / this.state.n)}
+                    pi={4 * (this.state.pointsInside / this.state.n)}
                 /><br />
                 <p>
                     <Button variant="outline-primary" size="lg" onClick={this.generatePoints}>Let there be points</Button>{' '}

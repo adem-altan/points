@@ -4,18 +4,15 @@ import { Toast, Badge } from 'react-bootstrap';
 const initialState = {
     inside: 0,
     outside: 0,
-    ratio: 0
+    trial: 0,
+    ratio: 0,
+    pi: 0
 };
 
 export class Stats extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            inside: 0,
-            outside: 0,
-            ratio: 0,
-            trial: 0
-        };
+        this.state = initialState;
     }
 
     render() {
@@ -30,7 +27,8 @@ export class Stats extends Component {
                     <Toast.Body>
                         <p>Inside: {this.props.inside}</p>
                         <p>Outside: {this.props.outside}</p>
-                        <p>Ratio: {this.props.ratio}</p>
+                        <p>Ratio (points inside): {this.props.ratio*100}%</p>
+                        <p>Pi (estimated): {this.props.pi}</p>
                     </Toast.Body>
                 </Toast>
             </div>
