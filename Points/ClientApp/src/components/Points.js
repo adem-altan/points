@@ -1,21 +1,18 @@
 ﻿import React, { Component } from 'react';
 import Plot from "react-plotly.js";
-import { Button, Dropdown, DropdownButton, select } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { Stats } from './Stats';
-import Select from 'react-select';
+import { Variables } from './Variables';
+
 
 const initialState = {
     x: [],
     y: [],
-    gridSize: 1000,
-    radius: 450,
-    n: 100,
     pointsInside: 0,
     pointsOutside: 0,
     insideRatio: 0.0,
     estimatedPiValue: 0.0
 };
-const options = [100, 200, 300, 400, 500, 1000];
 
 export class Points extends Component {
     constructor(props) {
@@ -23,13 +20,19 @@ export class Points extends Component {
         this.state = initialState;
         this.generatePoints = this.generatePoints.bind(this);
         this.setN = this.setN.bind(this);
+        this.setGridSize = this.setGridSize.bind(this);
+        this.setIterations = this.setIterations.bind(this);
+        this.setRadius = this.setRadius.bind(this);
     }
 
-    counter = 0;
+    // set default values
+    iterations = 0;
+    gridSize = 1000;
+    radius = 450;
     n = 100;
 
     generatePoints() {
-        this.counter++;
+        this.iterations++;
         this.setState(initialState);
         let xArray = [];
         let yArray = [];
@@ -49,11 +52,9 @@ export class Points extends Component {
     }
 
     isWithinRadiusOfCenter(x, y) {
-        const gridSize = this.state.gridSize;
-        const radius = this.state.radius;
-        const centre = gridSize / 2;
+        const centre = this.gridSize / 2;
         const distance = Math.sqrt(Math.pow(centre - x, 2) + Math.pow(centre - y, 2));
-        return distance < radius;
+        return distance < this.radius;
     }
 
     updateCounter(isInside) {
@@ -70,18 +71,31 @@ export class Points extends Component {
         });
     }
 
-    setN(e) {
-        this.n = e;
-        //this.setState({
-        //    n: e
-        //});
+    setN(n) {
+        console.log('setting n');
+        this.n = n;
+    }
+
+    setRadius(r) {
+        console.log('setting radius');
+        this.radius = r;
+    }
+
+    setGridSize(g) {
+        console.log('setting grid size');
+        this.gridSize = g;
+    }
+
+    setIterations(i) {
+        console.log('setting iterations');
+        this.iterations = i;
     }
 
     render() {
         return (
             <div>
                 <Stats
-                    trial={this.counter}
+                    trial={this.iterations}
                     inside={this.state.pointsInside}
                     outside={this.state.pointsOutside}
                     ratio={this.state.insideRatio}
@@ -90,11 +104,11 @@ export class Points extends Component {
                 <p>
                     <Button variant="outline-primary" size="lg" onClick={this.generatePoints}>Let there be points</Button>{' '}
                 </p>
-                <Select
-                    defaultValue="100"
-                    value={this.n}
-                    onChange={this.setN}
-                    options={options}
+                <Variables
+                    onSelectN={this.setN}
+                    onSelectRadius={this.setRadius}
+                    onSelectGridSize={this.setGridSize}
+                    onSelectIterations={this.setIterations}
                 />
                 <Plot
                     data={[
