@@ -23,6 +23,7 @@ export class Points extends Component {
         this.setGridSize = this.setGridSize.bind(this);
         this.setIterations = this.setIterations.bind(this);
         this.setRadius = this.setRadius.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
     // set default values
@@ -91,6 +92,20 @@ export class Points extends Component {
         this.iterations = i;
     }
 
+    async handleClick() {
+        const response = await fetch(`points?n=${this.n}&iterations=${this.iterations}&gridSize=${this.gridSize}&radius=${this.radius}`);
+        const data = await response.json();
+        console.log(data);
+        this.setState({
+            x: data.x,
+            y: data.y,
+            pointsInside: data.numberOfPointsInside,
+            pointsOutside: data.numberOfPointsOutside,
+            insideRatio: data.ratioOfPointsInside,
+            estimatedPiValue: data.estimatedPi
+        });
+    }
+
     render() {
         return (
             <div>
@@ -99,10 +114,10 @@ export class Points extends Component {
                     inside={this.state.pointsInside}
                     outside={this.state.pointsOutside}
                     ratio={this.state.insideRatio}
-                    pi={4 * this.state.insideRatio}
+                    pi={this.state.estimatedPiValue}
                 /><br />
                 <p>
-                    <Button variant="outline-primary" size="lg" onClick={this.generatePoints}>Let there be points</Button>{' '}
+                    <Button variant="outline-primary" size="lg" onClick={this.handleClick}>Let there be points</Button>{' '}
                 </p>
                 <Variables
                     onSelectN={this.setN}
