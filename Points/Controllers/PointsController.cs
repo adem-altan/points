@@ -32,7 +32,7 @@ namespace Points.Controllers
                 Y = yArray,
                 NumberOfPointsInside = numberOfPointsInside,
                 NumberOfPointsOutside = n - numberOfPointsInside,
-                RatioOfPointsInside = numberOfPointsInside / n,
+                RatioOfPointsInside = ratioOfPointsInside,
                 EstimatedPi = estimatedPi
             };
         }
