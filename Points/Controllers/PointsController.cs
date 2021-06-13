@@ -1,12 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using MediatR;
 using Points.Entities;
-using Points.Queries;
-using NuGet.Protocol.Core.Types;
-using System.Collections;
 using System;
-using System.Linq;
 
 namespace Points.Controllers
 {
@@ -32,7 +26,7 @@ namespace Points.Controllers
                 Y = yArray,
                 NumberOfPointsInside = numberOfPointsInside,
                 NumberOfPointsOutside = n - numberOfPointsInside,
-                RatioOfPointsInside = numberOfPointsInside / n,
+                RatioOfPointsInside = ratioOfPointsInside,
                 EstimatedPi = estimatedPi
             };
         }

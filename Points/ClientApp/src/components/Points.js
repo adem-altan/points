@@ -18,7 +18,6 @@ export class Points extends Component {
     constructor(props) {
         super(props);
         this.state = initialState;
-        this.generatePoints = this.generatePoints.bind(this);
         this.setN = this.setN.bind(this);
         this.setGridSize = this.setGridSize.bind(this);
         this.setIterations = this.setIterations.bind(this);
@@ -31,46 +30,6 @@ export class Points extends Component {
     gridSize = 1000;
     radius = 450;
     n = 100;
-
-    generatePoints() {
-        this.iterations++;
-        this.setState(initialState);
-        let xArray = [];
-        let yArray = [];
-
-        for (let i = 0; i < this.n; i++) {
-            let x = Math.floor((Math.random() * 1000));
-            let y = Math.floor((Math.random() * 1000));
-            xArray.push(x);
-            yArray.push(y);
-            const isInside = this.isWithinRadiusOfCenter(x, y);
-            this.updateCounter(isInside);
-        }
-        this.setState({
-            x: xArray,
-            y: yArray
-        }, () => { this.findInsideRatioAndEstimatedPi() });
-    }
-
-    isWithinRadiusOfCenter(x, y) {
-        const centre = this.gridSize / 2;
-        const distance = Math.sqrt(Math.pow(centre - x, 2) + Math.pow(centre - y, 2));
-        return distance < this.radius;
-    }
-
-    updateCounter(isInside) {
-        this.setState(prevState => {
-            return isInside ? { pointsInside: prevState.pointsInside + 1 } :
-                              { pointsOutside: prevState.pointsOutside + 1 };
-        });
-    }
-
-    findInsideRatioAndEstimatedPi() {
-        const ratio = (this.state.pointsInside / this.n);
-        this.setState({
-            insideRatio: ratio
-        });
-    }
 
     setN(n) {
         console.log('setting n');
@@ -95,7 +54,6 @@ export class Points extends Component {
     async handleClick() {
         const response = await fetch(`points?n=${this.n}&iterations=${this.iterations}&gridSize=${this.gridSize}&radius=${this.radius}`);
         const data = await response.json();
-        console.log(data);
         this.setState({
             x: data.x,
             y: data.y,
