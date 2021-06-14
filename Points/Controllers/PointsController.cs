@@ -31,7 +31,7 @@ namespace Points.Controllers
             };
         }
 
-        private static int[] GeneratePoints(int n, int gridSize)
+        public static int[] GeneratePoints(int n, int gridSize)
         {
             int[] points = new int[n];
             Random r = new Random();
@@ -68,6 +68,11 @@ namespace Points.Controllers
         public static double EstimatePi(int gridArea, double ratio, int radius)
         {
             return (gridArea * ratio) / (Math.Pow(radius, 2));
+        }
+
+        public static bool IsGivenPointWithinCircle(double distance, double radius)
+        {
+            return distance < radius;
         }
     }
 }
