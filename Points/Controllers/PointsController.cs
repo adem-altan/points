@@ -52,9 +52,9 @@ namespace Points.Controllers
 
             while (index < x.Length)
             {
-                var distance = Math.Sqrt(Math.Pow(centre - x[index], 2) + Math.Pow(centre - y[index], 2));
+                var distance = FindDistance(x[index], y[index], centre);//Math.Sqrt(Math.Pow(centre - x[index], 2) + Math.Pow(centre - y[index], 2));
                 
-                if (distance < radius)
+                if (IsGivenPointWithinCircle(distance, radius))
                 {
                     numberOfPointsInside++;
                 }
@@ -63,6 +63,11 @@ namespace Points.Controllers
             }
         
             return numberOfPointsInside;
+        }
+
+        public static double FindDistance(int x, int y, int centre)
+        {
+            return Math.Sqrt(Math.Pow(centre - x, 2) + Math.Pow(centre - y, 2));
         }
 
         public static double EstimatePi(int gridArea, double ratio, int radius)
