@@ -25,10 +25,12 @@ namespace Tests
             // occupies the entire box.
             // Hence random points should always be inside of
             // a circle with a diameter >= to the threshold
+            // which is diagonalLength / 2
 
             var n = 1_000_000_000; //number of points to generate
             var gridSize = new Random().Next(100, 500);
-            var radius = gridSize * Math.Sqrt(2);
+            var diagonalLength = gridSize * Math.Sqrt(2);
+            var radius = diagonalLength / 2;
             var xArray = PointsController.GeneratePoints(n, gridSize);
             var yArray = PointsController.GeneratePoints(n, gridSize);
 
